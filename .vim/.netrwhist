@@ -1,0 +1,5 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =8
+let g:netrw_dirhist_1='/home/fmontero/Music'
+let g:netrw_dirhist_2='/opt/ansible_playbooks/vars'
+let g:netrw_dirhist_3='/home/ava/RH_GitLabs/dotfiles/.git'
