@@ -6,3 +6,9 @@ dnf install vim
 dnf install tlp 
 sudo systemctl enable tlp
 dnf install vlc
+
+dnf install ansible
+
+Flash Player install:
+dnf install http://linuxdownload.adobe.com/adobe-release/adobe-release-x86_64-1.0-1.noarch.rpm
+dnf install flash-plugin alsa-plugins-pulseaudio libcurl
