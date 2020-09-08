@@ -138,6 +138,8 @@ alias more='less'
 alias path='echo -e ${PATH//:/\\n}'
 alias libpath='echo -e ${LD_LIBRARY_PATH//:/\\n}'
 alias vi='vim'
+alias rpm='sudo rpm'
+alias reboot='sudo systemctl reboot'
 
 # Openshift Stuff
 alias events="oc get events --sort-by='{.lastTimestamp}'"
@@ -150,4 +152,3 @@ export GOPATH=$HOME/go
 PATH=$PATH:$GOPATH/bin
 
 PATH=$PATH:~/bin
-
