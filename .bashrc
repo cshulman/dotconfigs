@@ -140,9 +140,15 @@ alias libpath='echo -e ${LD_LIBRARY_PATH//:/\\n}'
 alias vi='vim'
 alias rpm='sudo rpm'
 alias reboot='sudo systemctl reboot'
+alias update='sudo dnf -y update'
+alias clean='sudo dnf clean all'
 
 # Openshift Stuff
-alias events="oc get events --sort-by='{.lastTimestamp}'"
+#bug in OCP 4.2 or 3 for time events
+#alias events="oc get events --sort-by='{.lastTimestamp}'"
+alias events="oc get events --sort-by=.metadata.resourceVersion"
+
+alias upstat='watch oc get clusterversion,co,nodes'
 
 # Ansible Stuff
 alias ansible-syntax='ansible-playbook --syntax-check'
