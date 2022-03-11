@@ -26,18 +26,22 @@ if [ -f ~/.bash_colors ]; then
 fi
 
 # If support 256 color terminal then DO IT...
-/usr/bin/dircolors --p|grep -E xterm-256color > /dev/null
-if [ $? -eq 0 ]; then
-  export TERM='xterm-256color'
-else
-  export TERM='xterm-color'
-fi
+#/usr/bin/gdircolors --p|grep -E xterm-256color > /dev/null
+#if [ $? -eq 0 ]; then
+#  export TERM='xterm-256color'
+#else
+#  export TERM='xterm-color'
+#fi
+
+export TERM='xterm-color'
 
 case $(uname -s) in
-Linux|SunOS)
-  eval `dircolors ~/.trapd00r_colors`
+Linux|Darwin)
+  eval `gdircolors ~/.trapd00r_colors`
   ;;
 esac
+
+LS_COLORS=$LS_COLORS:'di=0;35:' ; export LS_COLORS
 
 #PS1='[\[\033[00;32m\]\u@\h\[\033[00;31m\]:$(date +%H%M) \[\033[00;35m\]\W\[\033[00m\]]\$ '
 
@@ -115,7 +119,7 @@ function load()
 # Aliases
 # ====================
 alias df='df -h'
-alias ls='ls -pFHh --color=auto'
+alias ls='ls -pFHh --color=always'
 alias ll='ls -lsh'
 alias lla='ls -la'
 alias la='ls -A'
