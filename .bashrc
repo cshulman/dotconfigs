@@ -26,20 +26,43 @@ if [ -f ~/.bash_colors ]; then
 fi
 
 # If support 256 color terminal then DO IT...
-#/usr/bin/gdircolors --p|grep -E xterm-256color > /dev/null
+#/usr/bin/dircolors --p|grep -E xterm-256color > /dev/null
 #if [ $? -eq 0 ]; then
 #  export TERM='xterm-256color'
 #else
 #  export TERM='xterm-color'
 #fi
 
-export TERM='xterm-color'
+#export TERM='xterm-256color'
+
+#case $(uname -s) in
+#Linux|SunOS)
+#  eval `dircolors ~/.trapd00r_colors`
+#  ;;
+#esac
+
+# set a fancy prompt (non-color, unless we know we "want" color)
+case "$TERM" in
+    xterm-color|*-256color) color_prompt=yes;;
+esac
 
 case $(uname -s) in
-Linux|Darwin)
-  eval `gdircolors ~/.trapd00r_colors`
+Darwin)
+  if [ -f /usr/local/opt/coreutils/libexec/gnubin/ls ];
+  then
+    alias ls="/usr/local/opt/coreutils/libexec/gnubin/ls"
+  fi
   ;;
 esac
+
+if [ -f ~/.trapd00r_colors ]; then
+  if command -v gdircolors;
+  then
+    eval `gdircolors ~/.trapd00r_colors`
+  else
+    eval `dircolors ~/.trapd00r_colors`
+  fi
+fi
 
 LS_COLORS=$LS_COLORS:'di=0;35:' ; export LS_COLORS
 
@@ -48,9 +71,12 @@ LS_COLORS=$LS_COLORS:'di=0;35:' ; export LS_COLORS
 # Show git branch name
 force_color_prompt=yes
 color_prompt=yes
+
 parse_git_branch() {
  git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
 }
+
+
 if [ "$color_prompt" = yes ]; then
 # PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[01;31m\]$(parse_git_branch)\[\033[00m\]\$ '
  PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[01;31m\]|$(date +%H:%M)$(parse_git_branch)\[\033[00m\]\$ '
@@ -118,13 +144,26 @@ function load()
 # ====================
 # Aliases
 # ====================
+
+# ls alias
+case $(uname -s) in
+  Linux)
+    alias ls='ls -F --color=auto'
+    ;;
+  Darwin)
+    alias ls='/usr/local/opt/coreutils/libexec/gnubin/ls -F --color=auto'
+    ;;
+esac
+
+alias ll='ls -lh'
+alias la='ls -At'
+alias lla='ls -Alh'
+alias l='ls -t'
+
+#alias lt='ls -ltrhs'
+
+###
 alias df='df -h'
-alias ls='ls -pFHh --color=always'
-alias ll='ls -lsh'
-alias lla='ls -la'
-alias la='ls -A'
-alias lt='ls -ltrhs'
-alias l='ls -CFlhs'
 alias ps='ps o user,pid,psr,%cpu,%mem,args axf --cols 120'
 alias grep='grep --color=auto'
 alias rsync='rsync -ravz --progress'
@@ -153,10 +192,12 @@ alias clean='sudo dnf clean all'
 alias events="oc get events --sort-by=.metadata.resourceVersion"
 
 alias upstat='watch oc get clusterversion,co,nodes'
+alias delgitops='oc delete gitopsservice cluster -n openshift-gitops'
+
 
 # Ansible Stuff
 alias ansible-syntax='ansible-playbook --syntax-check'
-
+alias ansible-playbook='sudo ansible-playbook'
 
 export GOPATH=$HOME/go
 PATH=$PATH:$GOPATH/bin
